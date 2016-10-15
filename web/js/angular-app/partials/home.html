@@ -1,0 +1,58 @@
+<div class="page-header">
+  <h1>BreweryDB</h1>
+  <img src="76.gif" ng-if="flash"/>
+</div>
+
+<div class="alert alert-danger alert-dismissible" role="alert" ng-if="showError" style="position: fixed; top: 0; right: 0; z-index: 1000;"> <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button> <strong>Error: </strong> {{ error }} </div>
+
+<div class="row"  ng-if="!flash && showContent">
+  <div class="col-lg-12" style="border: 1px solid #ccc; padding: 20px;" >
+    <div class="col-lg-6 pull-left">
+      <h3> {{ beer.name }} <span ng-if="beer.verified == 'verified'" class="glyphicon glyphicon-ok" aria-hidden="true"></span></h3>
+      <img src="{{beer.labels.medium}}" ng-if="beer.labels">
+    </div>
+    
+    <div class="col-lg-6 pull-right" style="text-align: left; padding-top: 50px;">
+      <p><strong>Brewery: </strong> {{ beer.breweries[0].name }}</p>
+      <p><strong>Description: </strong> {{ beer.description }} </p>
+      
+      <p>
+        <button type="button" class="btn btn-default" ng-click="getBeer();"><span class="glyphicon glyphicon-thumbs-up" aria-hidden="true"></span> &nbsp; Order 1 More</button>
+        <button type="button" class="btn btn-default" ng-click="getResults( beer.breweries[0].name , 'beer', true);"><span class="glyphicon glyphicon-glass" aria-hidden="true"></span> &nbsp; Wanna try another from this Brewery?</button>
+      </p>
+    </div>
+  </div>
+  
+  <div class="col-lg-12" style="border: 1px solid #ccc; padding: 20px; margin-top: 20px; margin-bottom: 20px;" >
+    <div class="input-group">
+      <span class="input-group-addon" id="basic-addon1">
+        <span class="glyphicon glyphicon-search" aria-hidden="true"></span>
+      </span>
+      
+      <input class="form-control" placeholder="Search" aria-describedby="basic-addon1" ng-model="searchText" value="{{ searchText }}" style="width: 50%">
+      
+      <div style="padding: 10px; float: left;">
+        <input type="radio" value="beer" name="search_type" ng-model="searchType"> Beer 
+      </div>
+      <div style="padding: 10px; float: left;">
+         <input type="radio" value="brewery" name="search_type" ng-model="searchType"> Brewery
+      </div>
+      
+      <button type="button" class="btn btn-default" ng-click="getResults(searchText, searchType);" ng-disabled="searchText.$valid"> Search </button>
+    </div>
+    
+     <p ng-show="!search_results.length" style="margin: 20px;">
+        No Search Results
+     </p>
+    <div class="media" ng-repeat="result in search_results| limitTo: 10">
+      <div class="media-left" ng-if="result.labels">
+        <img data-holder-rendered="true" src="{{ result.labels.icon }}">
+      </div>
+      <div class="media-body" style="text-align: left;">
+        <h4 class="media-heading"> {{ result.name }} </h4>
+          <p><strong>Brewery: </strong> {{ result.breweries[0].name }}</p>
+         {{ result.description }}
+      </div>
+    </div>
+  </div>
+</div>
